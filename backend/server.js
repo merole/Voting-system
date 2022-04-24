@@ -4,7 +4,7 @@ const express = require("express");
 const app = express();
 const http = require("http").Server(app);
 const io = require("socket.io")(http);
-var rcon = require("/root/Voting/Banning System/backend/node_modules/srcds/rcon.js");
+var rcon = require("/root/Voting-system/Banning System/backend/node_modules/srcds/rcon.js");
 
 
 const port = 80;
