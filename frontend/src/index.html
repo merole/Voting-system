@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link href="/dist/output.css" rel="stylesheet" />
+    <style>
+      @import url("https://fonts.googleapis.com/css2?family=Permanent+Marker&display=swap");
+    </style>
+    <title>Ban systém</title>
+  </head>
+  <body class="bg-gradient-to-br from-purple-700 to-pink-600">
+    <div id="login" class="flex flex-col bg-slate-800/90 w-full h-full absolute z-50 place-content-center items-center">
+      <h1 class="font-bold text-6xl pt-10 text-white pb-5 mb-7 font-Marker tracking-widest">Zadejte kód</h1>
+      <input maxlength="6" type="text" class="p-2 rounded-lg w-full max-w-md text-center" name="" id="code" placeholder="Kód pro zapsání" />
+      <a id="button_login" href="#" class="p-2 rounded-lg w-64 text-center font-Marker text-white bg-green-500 mt-4 text-2xl">Zapsat se</a>
+    </div>
+    <div id="waiting" class="hidden flex bg-slate-800/90 w-full h-full absolute z-50 place-content-center items-center">
+      <h1 id="waiting_heading" class="font-bold text-6xl pt-10 text-white pb-5 font-Marker tracking-widest">Oponent je na tahu...</h1>
+    </div>
+    <div id="admin_toolbox" class="hidden absolute flex bg-slate-800/90 w-max h-max z-50 place-content-center items-center flex-col p-2">
+      <h1 class="text-white">Adminův toolbox</h1>
+      <div class="flex w-full h-full space-x-5">
+        <a href="#" class="text-white pl-3 pr-3 bg-green-500 rounded-lg text-center pt-2 pb-2" id="admin_start_ban" onclick="socket_start_ban()">Start Ban</a>
+        <input type="text" class="p-2 rounded-lg text-center font-Marker w-56" id="admin_team_name" placeholder="Název týmu" />
+        <input type="text" class="p-2 rounded-lg text-center font-Marker w-56" id="admin_team_password" placeholder="Heslo týmu" />
+        <a href="#" id="admin_set_for_team_A" class="text-white pl-3 pr-3 bg-blue-400 rounded-lg text-center pt-2 pb-2" onclick="socket_set_team('A')">Nastavit pro tým A</a>
+        <a href="#" id="admin_set_for_team_B" class="text-white pl-3 pr-3 bg-orange-400 rounded-lg text-center pt-2 pb-2" onclick="socket_set_team('B')">Nastavit pro tým B</a>
+      </div>
+    </div>
+    <div class="flex flex-col w-screen h-screen items-center place-content-center pb-7">
+      <h1 class="font-bold text-6xl pt-10 text-white pb-5 font-Marker tracking-widest">Banování Map</h1>
+      <div class="flex flex-col w-screen h-full">
+        <!-- Row 1 -->
+        <div class="flex h-1/2 w-full space-x-5 pl-7 pr-7 mb-10 justify-center">
+          <div id="mirage" class="w-full h-full max-w-[300px] max-h-[300px] relative bg-contain bg-left bg-no-repeat" style="background-image: url(./resources/mirage.png); background-size: 350px">
+            <div class="flex flex-col w-full h-full justify-center items-center space-y-5">
+              <h1 class="text-white font-Marker tracking-widest text-4xl">Mirage</h1>
+              <a id="mirage_button" href="#" class="rounded-lg bg-red-600 w-min h-min p-3 text-2xl text-white">Ban</a>
+            </div>
+          </div>
+          <div id="inferno" class="w-full h-full max-w-[300px] max-h-[300px] relative bg-contain bg-right-top bg-no-repeat" style="background-image: url(./resources/inferno.jpg); background-size: 350px">
+            <div class="flex flex-col w-full h-full justify-center items-center space-y-5">
+              <h1 class="text-white font-Marker tracking-widest text-4xl">Inferno</h1>
+              <a id="inferno_button" href="#" class="rounded-lg bg-red-600 w-min h-min p-3 text-2xl text-white">Ban</a>
+            </div>
+          </div>
+          <div id="overpass" class="w-full h-full max-w-[300px] max-h-[300px] relative bg-contain bg-left-top bg-no-repeat" style="background-image: url(./resources/overpass.png); background-size: 350px">
+            <div class="flex flex-col w-full h-full justify-center items-center space-y-5">
+              <h1 class="text-white font-Marker tracking-widest text-4xl">Overpass</h1>
+              <a id="overpass_button" href="#" class="rounded-lg bg-red-600 w-min h-min p-3 text-2xl text-white">Ban</a>
+            </div>
+          </div>
+          <div id="vertigo" class="w-full h-full max-w-[300px] max-h-[300px] relative bg-contain bg-center bg-no-repeat" style="background-image: url(./resources/vertigo.jpg); background-size: 350px">
+            <div class="flex flex-col w-full h-full justify-center items-center space-y-5">
+              <h1 class="text-white font-Marker tracking-widest text-4xl">Vertigo</h1>
+              <a id="vertigo_button" href="#" class="rounded-lg bg-red-600 w-min h-min p-3 text-2xl text-white">Ban</a>
+            </div>
+          </div>
+        </div>
+
+        <!-- Row 2 -->
+        <div class="flex h-1/2 max-h-1/2 space-x-5 w-full pl-10 pr-10 justify-center">
+          <div id="nuke" class="w-full h-full max-w-[300px] max-h-[300px] relative bg-contain bg-center bg-no-repeat" style="background-image: url(./resources/nuke.jpg); background-size: 350px">
+            <div class="flex flex-col w-full h-full justify-center items-center space-y-5">
+              <h1 class="text-white font-Marker tracking-widest text-4xl">Nuke</h1>
+              <a id="nuke_button" href="#" class="rounded-lg bg-red-600 w-min h-min p-3 text-2xl text-white">Ban</a>
+            </div>
+          </div>
+          <div id="ancient" class="w-full h-full max-w-[300px] max-h-[300px] relative bg-contain bg-center bg-no-repeat" style="background-image: url(./resources/ancient.jpg); background-size: 350px">
+            <div class="flex flex-col w-full h-full justify-center items-center space-y-5">
+              <h1 class="text-white font-Marker tracking-widest text-4xl">Ancient</h1>
+              <a id="ancient_button" href="#" class="rounded-lg bg-red-600 w-min h-min p-3 text-2xl text-white">Ban</a>
+            </div>
+          </div>
+          <div id="dust2" class="w-full h-full max-w-[300px] max-h-[300px] relative bg-contain bg-center bg-no-repeat" style="background-image: url(./resources/dust2.png); background-size: 350px">
+            <div class="flex flex-col w-full h-full justify-center items-center space-y-5">
+              <h1 class="text-white font-Marker tracking-widest text-4xl">Dust 2</h1>
+              <a id="dust2_button" href="#" class="rounded-lg bg-red-600 w-min h-min p-3 text-2xl text-white">Ban</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <script src="/socket.io/socket.io.js"></script>
+    <script>
+      let no_socket = true;
+
+      let socket;
+
+      let team = "";
+      let group = "";
+      let code = "";
+
+      let waiting_heading = document.getElementById("waiting_heading");
+      let waiting_screen = document.getElementById("waiting");
+      let login_screen = document.getElementById("login");
+      let login_button = document.getElementById("button_login");
+
+      login_button.addEventListener("click", (e) => {
+        login();
+      });
+
+      let login_screen_visible = (display) => {
+        if (display) {
+          if (login_screen.classList.contains("hidden")) {
+            login_screen.classList.remove("hidden");
+          }
+        } else {
+          if (!login_screen.classList.contains("hidden")) {
+            login_screen.classList.add("hidden");
+          }
+        }
+      };
+
+      let waiting_screen_visible = (display) => {
+        if (display) {
+          if (waiting_screen.classList.contains("hidden")) {
+            waiting_screen.classList.remove("hidden");
+          }
+        } else {
+          if (!waiting_screen.classList.contains("hidden")) {
+            waiting_screen.classList.add("hidden");
+          }
+        }
+      };
+
+      let set_waiting_heading = (text) => {
+        waiting_heading.innerHTML = text;
+      };
+
+      document.getElementById("code").addEventListener(
+        "keydown",
+        (e) => {
+          let code = e.keyCode || e.which;
+          if (code == 13) {
+            login();
+          }
+        },
+        false
+      );
+
+      let login = () => {
+        socket = io();
+        socket.on("connect", () => {
+          console.log("Connected!");
+        });
+
+        login_screen_visible(false);
+        set_waiting_heading("Zapisování...");
+        waiting_screen_visible(false);
+
+        code = document.getElementById("code").value;
+
+        socket.emit("login", { code: code });
+
+        socket.on("login_response", (data) => {
+          switch (data.result) {
+            case "Invalid Code":
+              console.log("Wrong code");
+              waiting_screen_visible(false);
+              login_screen_visible(true);
+              break;
+            case "A":
+              set_waiting_heading(`Vítejte, týme ${data.team}!`);
+              login_screen_visible(false);
+              waiting_screen_visible(true);
+              group = "A";
+              team = data.team;
+              break;
+            case "B":
+              set_waiting_heading(`Vítejte, týme ${data.team}!`);
+              login_screen_visible(false);
+              waiting_screen_visible(true);
+              group = "B";
+              team = data.team;
+              break;
+            case "Admin":
+              set_waiting_heading(`Vítejte, Admine!`);
+              login_screen_visible(false);
+              group = "Admin";
+              team = "Admin Team";
+              document.getElementById("admin_toolbox").classList.remove("hidden");
+              break;
+          }
+        });
+
+        socket.on("ban_start", (data) => {
+          if (group != "Admin") {
+            waiting_screen_visible(true);
+            if (data.starting_team == group) {
+              set_waiting_heading("Jste na tahu");
+              setTimeout(() => {
+                waiting_screen_visible(false);
+              }, 1000);
+            } else {
+              set_waiting_heading("Soupeř je na tahu");
+            }
+          }
+        });
+
+        socket.on("banned_map", (data) => {
+          console.log(data);
+          document.getElementById(data.id).classList.add("hidden");
+        });
+
+        socket.on("ban_end", (data) => {
+          console.log("Ban end");
+          console.log(data);
+          // tady jsem odstranil podminku maps.length == 1
+          set_waiting_heading(`Banování u konce. Zvítězila mapa ${data.maps[0]}`);
+          waiting_screen_visible(true);
+        });
+      };
+
+      let socket_start_ban = () => {
+        console.log("Startin ban...");
+        socket.emit("start_ban", { code: code });
+      };
+
+      let socket_set_team = (team) => {
+        let team_Name = document.getElementById("admin_team_name").value;
+        let code_Team = document.getElementById("admin_team_password").value;
+        console.log(code_Team);
+        console.log(`Nastavení posláno pro tým ${team}`);
+        socket.emit("admin_set_team", { code: code, team: team, teamName: team_Name, teamCode: code_Team });
+        document.getElementById("admin_team_password").value = "";
+        document.getElementById("admin_team_name").value = "";
+      };
+
+      var buttons = Array.from(document.getElementsByTagName("a")).forEach((button, index, array) => {
+        if (!button.id.startsWith("admin_"))
+          button.onclick = (e) => {
+            socket.emit("request_map_banned", { code: code, map: button.id });
+          };
+      });
+    </script>
+  </body>
+</html>
