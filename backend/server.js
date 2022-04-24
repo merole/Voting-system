@@ -14,9 +14,10 @@ let socketA = [];
 let socketB = [];
 let map_num = 3;  //TODO Počet map na konci
 let socketAdmin = [];
+let map_list_val = ["ascent", "bind", "breeze", "fracture", "haven", "icebox", "split"];
 let map_list = ["mirage", "overpass", "dust2", "vertigo", "ancient", "inferno", "nuke"];
 let maps_remaining = [];
-maps_remaining = map_list;
+maps_remaining = map_list_val;
 let Ax = 0;
 let Bx = 0;
 
